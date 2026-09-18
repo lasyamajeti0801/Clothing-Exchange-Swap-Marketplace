@@ -1,0 +1,192 @@
+// Prisma Schema for ReWear Clothing Exchange & Swap Marketplace
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String         @id @default(uuid())
+  email           String         @unique
+  password        String
+  name            String
+  role            String         @default("USER") // USER, ADMIN
+  avatarUrl       String?
+  bio             String?
+  city            String         @default("Hyderabad")
+  state           String         @default("Telangana")
+  country         String         @default("India")
+  latitude        Float?
+  longitude       Float?
+  rating          Float          @default(5.0)
+  swapCount       Int            @default(0)
+  isSuspended     Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  listings        ClothingItem[]
+  sentSwaps       SwapRequest[]  @relation("SentSwaps")
+  receivedSwaps   SwapRequest[]  @relation("ReceivedSwaps")
+  messages        Message[]
+  savedItems      SavedItem[]
+  notifications   Notification[]
+  reviewsGiven    Review[]       @relation("ReviewsGiven")
+  reviewsReceived Review[]       @relation("ReviewsReceived")
+  reportsFiled    Report[]       @relation("ReportsFiled")
+}
+
+model ClothingItem {
+  id                  String         @id @default(uuid())
+  title               String
+  description         String
+  category            String         // T-Shirts, Shirts, Jeans, Kurtas, Sarees, Jackets, Hoodies, etc.
+  subcategory         String?
+  brand               String
+  size                String         // XS, S, M, L, XL, XXL, Free Size
+  color               String
+  material            String
+  condition           String         // NEW_WITH_TAGS, LIKE_NEW, EXCELLENT, GOOD, FAIR
+  purchaseAge         String         // < 6 months, 6-12 months, 1-2 years, 2+ years
+  estimatedValue      Float          // In INR (₹)
+  originalPrice       Float?
+  status              String         @default("ACTIVE") // ACTIVE, PENDING_SWAP, SWAPPED, ARCHIVED, REMOVED
+  exchangePreferences String?
+  city                String         @default("Hyderabad")
+  state               String         @default("Telangana")
+  
+  ownerId             String
+  owner               User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  images              ClothingImage[]
+  swapsOffered        SwapRequest[]  @relation("OfferedItem")
+  swapsRequested      SwapRequest[]  @relation("RequestedItem")
+  savedBy             SavedItem[]
+  reports             Report[]
+
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+}
+
+model ClothingImage {
+  id             String        @id @default(uuid())
+  clothingId     String
+  clothing       ClothingItem  @relation(fields: [clothingId], references: [id], onDelete: Cascade)
+  url            String
+  isPrimary      Boolean       @default(false)
+  order          Int           @default(0)
+  createdAt      DateTime      @default(now())
+}
+
+model SwapRequest {
+  id                 String        @id @default(uuid())
+  senderId           String
+  sender             User          @relation("SentSwaps", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId         String
+  receiver           User          @relation("ReceivedSwaps", fields: [receiverId], references: [id], onDelete: Cascade)
+  
+  offeredItemId      String
+  offeredItem        ClothingItem  @relation("OfferedItem", fields: [offeredItemId], references: [id], onDelete: Cascade)
+  requestedItemId    String
+  requestedItem      ClothingItem  @relation("RequestedItem", fields: [requestedItemId], references: [id], onDelete: Cascade)
+  
+  status             String        @default("PENDING") 
+  // PENDING, NEGOTIATING, ACCEPTED, REJECTED, CANCELLED, SHIPPING, READY_FOR_EXCHANGE, COMPLETED, DISPUTED, EXPIRED
+
+  message            String?       // Initial offer note
+  exchangeMethod     String        @default("LOCAL_MEETUP") // LOCAL_MEETUP, SHIPPING
+  senderReady        Boolean       @default(false)
+  receiverReady      Boolean       @default(false)
+  deliveryDetails    String?
+  disputeReason      String?
+
+  messages           Message[]
+  reviews            Review[]
+  reports            Report[]
+
+  completedAt        DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  swapId         String
+  swap           SwapRequest  @relation(fields: [swapId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  content        String
+  messageType    String       @default("TEXT") // TEXT, OFFER_MODIFIED, STATUS_CHANGE
+  metadata       String?      // Optional JSON data for structured offer updates
+  read           Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+}
+
+model SavedItem {
+  id             String        @id @default(uuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clothingId     String
+  clothing       ClothingItem  @relation(fields: [clothingId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+
+  @@unique([userId, clothingId])
+}
+
+model Notification {
+  id          String       @id @default(uuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  actorId     String?
+  type        String       // SWAP_REQUEST, SWAP_ACCEPTED, SWAP_REJECTED, MESSAGE, OFFER_MODIFIED, SWAP_COMPLETED, LISTING_SAVED, DISPUTE_UPDATE
+  title       String
+  message     String
+  link        String?
+  isRead      Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+}
+
+model Review {
+  id          String       @id @default(uuid())
+  swapId      String
+  swap        SwapRequest  @relation(fields: [swapId], references: [id], onDelete: Cascade)
+  reviewerId  String
+  reviewer    User         @relation("ReviewsGiven", fields: [reviewerId], references: [id], onDelete: Cascade)
+  revieweeId  String
+  reviewee    User         @relation("ReviewsReceived", fields: [revieweeId], references: [id], onDelete: Cascade)
+  rating      Int          // 1 to 5
+  comment     String?
+  createdAt   DateTime     @default(now())
+
+  @@unique([swapId, reviewerId])
+}
+
+model Report {
+  id                  String        @id @default(uuid())
+  reporterId          String
+  reporter            User          @relation("ReportsFiled", fields: [reporterId], references: [id], onDelete: Cascade)
+  reportedUserId      String?
+  reportedListingId   String?
+  reportedListing     ClothingItem? @relation(fields: [reportedListingId], references: [id], onDelete: SetNull)
+  swapId              String?
+  swap                SwapRequest?  @relation(fields: [swapId], references: [id], onDelete: SetNull)
+  reason              String        // INAPPROPRIATE_CONTENT, MISLEADING_DESCRIPTION, WRONG_CONDITION, FRAUDULENT_BEHAVIOR, HARASSMENT, OTHER
+  description         String
+  status              String        @default("OPEN") // OPEN, UNDER_REVIEW, RESOLVED, CLOSED
+  adminNotes          String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+}
+
+model AdminLog {
+  id          String       @id @default(uuid())
+  adminId     String
+  action      String       // SUSPEND_USER, ACTIVATE_USER, REMOVE_LISTING, RESOLVE_REPORT, RESOLVE_DISPUTE
+  targetType  String       // USER, LISTING, SWAP, REPORT
+  targetId    String
+  notes       String?
+  createdAt   DateTime     @default(now())
+}

@@ -1,5 +1,7 @@
+
 # ReWear — Clothing Exchange & Swap Marketplace
-> **A sustainable fashion barter marketplace where users exchange wearable clothes directly with other users instead of buying and selling them.**
+
+A sustainable fashion barter marketplace where users exchange wearable clothes directly with other users instead of buying and selling them.
 
 [![Node.js](https://img.shields.io/badge/Node.js-v20+-green.svg)](https://nodejs.org)
 [![React](https://img.shields.io/badge/React-v18-blue.svg)](https://react.dev)
@@ -9,123 +11,426 @@
 
 ---
 
-## 🌿 Project Vision & Core Principle
-Fast fashion has accelerated textile waste and natural resource depletion. **ReWear** provides a cashless circular economy platform focused on:
-$$\text{Reuse} \longrightarrow \text{Exchange} \longrightarrow \text{Reduce Waste} \longrightarrow \text{Sustainable Fashion}$$
+## 🌿 Project Overview
 
-This is an **exchange-first barter platform**, NOT a traditional e-commerce store:
-- ❌ No "Add to Cart", checkout gateways, or online product payments.
-- ✅ Direct swaps, offer counter-proposals, transparent valuation algorithms, peer negotiation chats, and neighborhood handovers.
+ReWear is a sustainable fashion exchange platform designed to encourage clothing reuse and reduce textile waste.
+
+Fast fashion has accelerated textile waste and natural resource depletion. ReWear promotes a circular economy by enabling users to exchange wearable clothing directly with one another.
+
+The platform follows an **exchange-first barter model**, rather than a traditional e-commerce approach.
+
+### Core Principles
+
+- No traditional shopping cart or checkout system.
+- No online product purchasing.
+- Direct clothing swaps between users.
+- Transparent clothing valuation.
+- Offer and counter-proposal functionality.
+- Peer-to-peer negotiation.
+- Community-based clothing exchange.
+
+**Reuse → Exchange → Reduce Waste → Sustainable Fashion**
 
 ---
 
-## 🚀 Quick Start (Local Setup)
+## 🎯 Project Objectives
+
+- Encourage sustainable fashion practices.
+- Reduce clothing waste through reuse.
+- Enable direct peer-to-peer clothing exchanges.
+- Provide transparent clothing valuation.
+- Support secure communication between users.
+- Build a community-driven circular fashion marketplace.
+
+---
+
+## 🚀 Key Features
+
+### 1. User Authentication and Management
+
+- User registration and login.
+- Secure authentication.
+- User profile management.
+- Role-based access control.
+- Admin account management.
+
+### 2. Clothing Listings
+
+- Create clothing listings.
+- Browse available clothing.
+- View detailed clothing information.
+- Edit and manage personal listings.
+- Upload clothing images.
+- Organize clothing by categories.
+
+### 3. Peer-to-Peer Clothing Barter
+
+- Exchange clothing items directly.
+- Send swap proposals.
+- Submit counter-offers.
+- Compare items side by side.
+- Calculate estimated value differences.
+- Track swap progress.
+
+### 4. Swap Workflow Management
+
+The platform supports server-enforced swap state transitions:
+
+PENDING → NEGOTIATING → ACCEPTED → SHIPPING / READY_FOR_EXCHANGE → COMPLETED
+
+Additional states include:
+
+- REJECTED
+- CANCELLED
+- DISPUTED
+
+### 5. Transparent Algorithmic Valuation
+
+The platform estimates clothing value using factors such as:
+
+- Clothing category.
+- Brand.
+- Condition.
+- Purchase age.
+- Material.
+
+The valuation engine categorizes proposals into:
+
+- Close Match
+- Moderate Difference
+- Large Difference
+
+These estimates help users make informed exchange decisions.
+
+### 6. Real-Time Negotiation Chat
+
+- Real-time communication using Socket.IO.
+- REST polling fallback.
+- In-chat counter-offers.
+- Swap-related discussions.
+- Real-time status updates.
+- Participant privacy controls.
+
+### 7. Wishlist and Saved Items
+
+- Save preferred clothing items.
+- Manage wishlist items.
+- Quickly revisit interesting listings.
+
+### 8. Reviews and Ratings
+
+- Submit reviews after completed exchanges.
+- Share user experiences.
+- Support trust within the marketplace.
+
+### 9. Sustainability Impact Tracker
+
+The platform estimates environmental impact based on completed trades, including:
+
+- Garments diverted from potential landfill disposal.
+- Estimated freshwater conservation.
+- Estimated carbon emissions avoided.
+
+### 10. Admin Dashboard
+
+The admin console provides:
+
+- Total user statistics.
+- Active listing statistics.
+- Completed swap statistics.
+- Pending dispute tracking.
+- Clothing category visualizations.
+- User management.
+- User suspension and activation.
+- Listing moderation.
+- Dispute resolution.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+
+- React.js
+- Tailwind CSS
+- Vite
+- JavaScript
+
+### Backend
+
+- Node.js
+- Express.js
+- Socket.IO
+
+### Database
+
+- SQLite
+- Prisma ORM
+
+### Development and Deployment Tools
+
+- Git
+- GitHub
+- Docker
+- Docker Compose
+- npm
+
+---
+
+## 🏗️ System Architecture
+
+ReWear follows a full-stack architecture consisting of:
+
+1. React frontend for user interaction.
+2. Node.js and Express backend for business logic.
+3. Prisma ORM for database operations.
+4. SQLite database for data persistence.
+5. Socket.IO for real-time communication.
+6. Authentication and authorization middleware.
+7. Admin dashboard for moderation and analytics.
+
+---
+
+## 📂 Project Structure
+
+```text
+ReWear/
+│
+├── client/
+│   ├── public/
+│   └── src/
+│       ├── components/
+│       ├── context/
+│       ├── pages/
+│       ├── services/
+│       ├── App.jsx
+│       ├── index.css
+│       └── main.jsx
+│
+├── server/
+│   ├── prisma/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── utils/
+│   ├── tests/
+│   └── index.js
+│
+├── docs/
+│   ├── PRD.md
+│   ├── ARCHITECTURE.md
+│   ├── API_DOCUMENTATION.md
+│   ├── DATABASE_SCHEMA.md
+│   ├── SECURITY.md
+│   ├── TESTING.md
+│   └── DEPLOYMENT.md
+│
+├── tests/
+├── Dockerfile
+├── docker-compose.yml
+├── package.json
+└── README.md
+```
+
+---
+
+## ⚙️ Installation and Setup
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- npm (v9 or higher)
 
-### 1. Install Dependencies
+- Node.js v18 or higher.
+- npm v9 or higher.
+- Git.
+
+### 1. Clone the Repository
+
 ```bash
-# In project root:
+git clone https://github.com/lasyamajeti0801/Clothing-Exchange-Swap-Marketplace.git
+```
+
+Navigate into the project:
+
+```bash
+cd Clothing-Exchange-Swap-Marketplace
+```
+
+### 2. Install Dependencies
+
+From the project root:
+
+```bash
 npm run install:all
 ```
-*(Or run `npm install` inside both `server/` and `client/` directories.)*
 
-### 2. Set Up Database & Seed Realistic Data
+Alternatively, install dependencies separately:
+
+```bash
+cd server
+npm install
+
+cd ../client
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create the required environment files based on the provided environment templates.
+
+Do not commit real secrets, passwords, API keys, or production credentials.
+
+### 4. Set Up the Database
+
+Navigate to the server directory:
+
 ```bash
 cd server
 npm run db:setup
 ```
-This generates the Prisma Client, creates the SQLite database, and populates:
-- **21 Realistic Users** across Indian regional hubs (Hyderabad, Vijayawada, Mangalagiri, Guntur, Bengaluru, Mumbai, Delhi).
-- **52 Clothing Items** with high-resolution fashion imagery across 14 categories.
-- **32 Swap Proposals** spanning all workflow states.
-- Pre-populated chat threads, reviews, wishlist items, and admin moderation reports.
 
-### 3. Run Development Servers
-Open two terminal windows:
+This command generates the Prisma Client, creates the SQLite database, and seeds development data if configured by the project.
 
-**Terminal 1 (Backend API Server):**
+### 5. Start the Backend Server
+
+Open a terminal:
+
 ```bash
 cd server
 npm run dev
-# Running on http://localhost:5000
 ```
 
-**Terminal 2 (Frontend Client):**
+Backend server:
+
+```text
+http://localhost:5000
+```
+
+### 6. Start the Frontend
+
+Open another terminal:
+
 ```bash
 cd client
 npm run dev
-# Running on http://localhost:5173
 ```
 
-Now open `http://localhost:5173` in your browser!
+Frontend application:
+
+```text
+http://localhost:5173
+```
+
+Open the frontend URL in your browser.
 
 ---
 
-## 👥 Demo Accounts (1-Click Login Ready)
+## 👥 Demo Accounts
 
-| Persona / Name | Email | Password | Role / Hub |
-|---|---|---|---|
-| **Priya Sharma** | `priya@rewear.org` | `Password@123` | Vintage Collector (Hyderabad) |
-| **Rahul Verma** | `rahul@rewear.org` | `Password@123` | Streetwear & Denim (Vijayawada) |
-| **Ananya Patel** | `ananya@rewear.org` | `Password@123` | Handloom Specialist (Mangalagiri) |
-| **ReWear Admin** | `admin@rewear.org` | `Admin@123456` | Platform Administrator |
+The following accounts are intended for local development and demonstration, provided they exist in your seeded database.
 
-*Note: All 20 regular seeded users use the password `Password@123`.*
+| Persona | Email | Role |
+|---|---|---|
+| Priya Sharma | priya@rewear.org | Regular User |
+| Rahul Verma | rahul@rewear.org | Regular User |
+| Ananya Patel | ananya@rewear.org | Regular User |
+| ReWear Admin | admin@rewear.org | Administrator |
 
----
-
-## ✨ Key Features & Architecture
-
-### 1. Peer-to-Peer Clothing Barter & State Machine
-- Strict server-enforced state transitions:
-  `PENDING` → `NEGOTIATING` → `ACCEPTED` → `SHIPPING` / `READY_FOR_EXCHANGE` → `COMPLETED`.
-- Also supports `REJECTED`, `CANCELLED`, and `DISPUTED`.
-- Side-by-side interactive comparison: **Your Item ⇄ Their Item** with live value difference calculations.
-
-### 2. Transparent Algorithmic Valuation Engine
-- Computes fair trade estimates using:
-  $$\text{Value} = \text{Category Base} \times \text{Brand Factor} \times \text{Condition Grade} \times \text{Purchase Age} \times \text{Material}$$
-- Categorizes proposals into **Close Match**, **Moderate Difference**, and **Large Difference** to guide civil discussions.
-
-### 3. Real-Time Negotiation Chat
-- Powered by **Socket.IO** with automatic REST polling fallback.
-- In-chat counter-offers (select a different item from your closet directly inside the negotiation thread).
-- Real-time status updates and participant privacy guards.
-
-### 4. Personal & Community Sustainability Tracker
-- Quantifies circular impact based on completed trades:
-  - Estimated garments diverted from landfills.
-  - Liters of freshwater conserved ($1\text{ garment} \approx 2,700\text{L}$).
-  - Kilograms of $\text{CO}_2$ emissions avoided ($1\text{ garment} \approx 2.5\text{kg}$).
-
-### 5. Admin Moderation & Analytics Console (`/admin`)
-- Real-time KPI counters (Total Users, Active Listings, Completed Swaps, Pending Disputes).
-- Recharts category distribution visualizations.
-- Full Swapper management (search, suspend/activate).
-- Wardrobe moderation and dispute resolution.
+**Note:** Demo credentials should only be used in local development environments. Never use development passwords in production.
 
 ---
 
 ## 🧪 Automated Testing
 
-Run the test suite from the `server/` directory:
+Run the test suite from the server directory:
+
 ```bash
 cd server
 npm test
 ```
-- **13 automated tests** covering valuation calculations, swap fairness logic, state machine transitions, participant role guards, and REST API endpoints.
+
+The project includes automated tests covering areas such as:
+
+- Valuation calculations.
+- Swap fairness logic.
+- State machine transitions.
+- Participant authorization.
+- REST API endpoints.
+
+Refer to the testing documentation for detailed test coverage.
 
 ---
 
-## 📚 Complete Documentation
+## 📚 Documentation
 
-- [`PRD.md`](./docs/PRD.md) — Product Requirements Document & User Personas.
-- [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — System Architecture, Component Flow & State Guards.
-- [`API_DOCUMENTATION.md`](./docs/API_DOCUMENTATION.md) — Complete REST API Catalog & Request/Response Samples.
-- [`DATABASE_SCHEMA.md`](./docs/DATABASE_SCHEMA.md) — Prisma Entity Models, Relationships & Indexes.
-- [`SECURITY.md`](./docs/SECURITY.md) — Authentication, Data Isolation & Privacy Safeguards.
-- [`TESTING.md`](./docs/TESTING.md) — Automated Test Suite & Acceptance Verification Runbook.
-- [`DEPLOYMENT.md`](./docs/DEPLOYMENT.md) — Production Deployment to Vercel, Render, Supabase, and Docker.
+Detailed project documentation is available in the `docs/` directory.
+
+| Document | Description |
+|---|---|
+| [PRD](./docs/PRD.md) | Product Requirements Document and User Personas |
+| [Architecture](./docs/ARCHITECTURE.md) | System Architecture and Component Flow |
+| [API Documentation](./docs/API_DOCUMENTATION.md) | REST API Catalog and Request/Response Samples |
+| [Database Schema](./docs/DATABASE_SCHEMA.md) | Prisma Models, Relationships and Indexes |
+| [Security](./docs/SECURITY.md) | Authentication, Data Isolation and Privacy |
+| [Testing](./docs/TESTING.md) | Automated Test Suite and Verification |
+| [Deployment](./docs/DEPLOYMENT.md) | Production Deployment and Infrastructure |
+
+---
+
+## 🔐 Security Considerations
+
+- Authentication and authorization controls.
+- Role-based access management.
+- Protected API endpoints.
+- User data isolation.
+- Input validation.
+- Secure environment variable handling.
+- Privacy-aware communication features.
+
+Refer to [SECURITY.md](./docs/SECURITY.md) for additional details.
+
+---
+
+## 🌍 Sustainability Impact
+
+ReWear aims to support sustainable fashion by making clothing exchange accessible and convenient.
+
+By encouraging users to reuse existing garments, the platform promotes:
+
+- Reduced textile waste.
+- Extended clothing lifecycles.
+- Community participation.
+- Circular fashion practices.
+
+Environmental impact estimates are illustrative and depend on the assumptions used by the application.
+
+---
+
+## 🔮 Future Enhancements
+
+Potential future improvements include:
+
+- AI-powered clothing recommendations.
+- Image-based clothing categorization.
+- Advanced sustainability analytics.
+- Location-based exchange discovery.
+- Mobile application support.
+- Enhanced fraud detection.
+- Multi-language support.
+
+---
+
+## 👩‍💻 Author
+
+**Mounika Lasya Majeti**
+
+GitHub: [@lasyamajeti0801](https://github.com/lasyamajeti0801)
+
+---
+
+## 📄 License
+
+This project is intended for educational, portfolio, and demonstration purposes.
+
+Add an appropriate open-source license if you decide to distribute the project under one.
